@@ -52,7 +52,7 @@ class Calculator(object):
 
         # Top-Level-Ausgabe
         self.master.title('Malia Calculator')
-        self.master.minsize(width=335, height=415)
+        self.master.minsize(width=680, height=415)
         self.master.geometry('-150+100')
         self.master.resizable(True, True)
         self.master['bg'] = self.theme['master_bg']
@@ -67,7 +67,7 @@ class Calculator(object):
         self._frame_buttons = tk.Frame(self.master, bg=self.theme['frame_bg'])
         self._frame_buttons.pack(side="top", padx=20, pady=20, fill=tk.BOTH, expand=True)
         self._frame_buttons.rowconfigure(tuple(range(6)), weight=1)
-        self._frame_buttons.columnconfigure(tuple(range(4)), weight=1)
+        self._frame_buttons.columnconfigure(tuple(range(8)), weight=1)
 
         # Start-up-Funktionen
         self._create_input(self._frame_input)
@@ -175,6 +175,33 @@ class Calculator(object):
         self._BTN_RESULT = tk.Button(master, text='=', cnf=self.theme['BTN_OPERATOR'])
         self._BTN_DOT = tk.Button(master, text='.', cnf=self.theme['BTN_DEFAULT'])
 
+        # Installation der Wissenschaftlichen Funktionstasten des Rechners.
+        self._BTN_PI = tk.Button(master, text='π', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_SIN = tk.Button(master, text='sin', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_COS = tk.Button(master, text='cos', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_TAN = tk.Button(master, text='tan', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_2PI = tk.Button(master, text='2π', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_COSH = tk.Button(master, text='cosh', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_TANH = tk.Button(master, text='tanh', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_SINH = tk.Button(master, text='sinh', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_LOG = tk.Button(master, text='log', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_INV = tk.Button(master, text='inv', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_MOD = tk.Button(master, text='mod', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_E = tk.Button(master, text='e', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_LOG2 = tk.Button(master, text='log2', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_DEG = tk.Button(master, text='deg', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_ACOSH = tk.Button(master, text='acosh', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_ASINH = tk.Button(master, text='asinh', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_LOG10 = tk.Button(master, text='log10', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_LOG1P = tk.Button(master, text='log1p', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_EXPM1 = tk.Button(master, text='expm1', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_LGAMMA = tk.Button(master, text='lgamma', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_RAD = tk.Button(master, text='rad', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_GAMMA = tk.Button(master, text='gamma', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_ERF = tk.Button(master, text='erf', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_ERFC = tk.Button(master, text='erfc', cnf=self.theme['BTN_OPERATOR'])
+        
+
         # Instanziierung der leeren Schaltflächen, für die zukünftige Implementierung
         self._BTN_EMPTY1 = tk.Button(master, text='', cnf=self.theme['BTN_OPERATOR'])
         self._BTN_EMPTY2 = tk.Button(master, text='', cnf=self.theme['BTN_OPERATOR'])
@@ -185,36 +212,61 @@ class Calculator(object):
         self._BTN_OPEN_PARENT.grid(row=0, column=1, padx=1, pady=1, sticky="news")
         self._BTN_CLOSE_PARENT.grid(row=0, column=2, padx=1, pady=1, sticky="news")
         self._BTN_DEL.grid(row=0, column=3, padx=1, pady=1, sticky="news")
+        self._BTN_PI.grid(row=0, column=4, padx=1, pady=1, sticky="news")
+        self._BTN_SIN.grid(row=0, column=5, padx=1, pady=1, sticky="news")
+        self._BTN_COS.grid(row=0, column=6, padx=1, pady=1, sticky="news")
+        self._BTN_TAN.grid(row=0, column=7, padx=1, pady=1, sticky="news")
 
         # Zeile 1
         self._BTN_NUM_7.grid(row=1, column=0, padx=1, pady=1, sticky="news")
         self._BTN_NUM_8.grid(row=1, column=1, padx=1, pady=1, sticky="news")
         self._BTN_NUM_9.grid(row=1, column=2, padx=1, pady=1, sticky="news")
         self._BTN_MULT.grid(row=1, column=3, padx=1, pady=1, sticky="news")
+        self._BTN_2PI.grid(row=1, column=4, padx=1, pady=1, sticky="news")
+        self._BTN_COSH.grid(row=1, column=5, padx=1, pady=1, sticky="news")
+        self._BTN_TANH.grid(row=1, column=6, padx=1, pady=1, sticky="news")
+        self._BTN_SINH.grid(row=1, column=7, padx=1, pady=1, sticky="news")
 
         # Zeile 2
         self._BTN_NUM_4.grid(row=2, column=0, padx=1, pady=1, sticky="news")
         self._BTN_NUM_5.grid(row=2, column=1, padx=1, pady=1, sticky="news")
         self._BTN_NUM_6.grid(row=2, column=2, padx=1, pady=1, sticky="news")
         self._BTN_SUB.grid(row=2, column=3, padx=1, pady=1, sticky="news")
+        self._BTN_LOG.grid(row=2, column=4, padx=1, pady=1, sticky="news")
+        self._BTN_INV.grid(row=2, column=5, padx=1, pady=1, sticky="news")
+        self._BTN_MOD.grid(row=2, column=6, padx=1, pady=1, sticky="news")
+        self._BTN_E.grid(row=2, column=7, padx=1, pady=1, sticky="news")
 
         # Zeile 3
         self._BTN_NUM_1.grid(row=3, column=0, padx=1, pady=1, sticky="news")
         self._BTN_NUM_2.grid(row=3, column=1, padx=1, pady=1, sticky="news")
         self._BTN_NUM_3.grid(row=3, column=2, padx=1, pady=1, sticky="news")
         self._BTN_ADD.grid(row=3, column=3, padx=1, pady=1, sticky="news")
+        self._BTN_RAD.grid(row=3, column=4, padx=1, pady=1, sticky="news")
+        self._BTN_GAMMA.grid(row=3, column=5, padx=1, pady=1, sticky="news") 
+        self._BTN_ERF.grid(row=3, column=6, padx=1, pady=1, sticky="news")
+        self._BTN_ERFC.grid(row=3, column=7, padx=1, pady=1, sticky="news")
 
         # Zeile 4
         self._BTN_DOT.grid(row=4, column=0, padx=1, pady=1, sticky="news")
         self._BTN_NUM_0.grid(row=4, column=1, padx=1, pady=1, sticky="news")
         self._BTN_RESULT.grid(row=4, column=2, padx=1, pady=1, sticky="news")
         self._BTN_DIV.grid(row=4, column=3, padx=1, pady=1, sticky="news")
+        self._BTN_LOG2.grid(row=4, column=4, padx=1, pady=1, sticky="news")
+        self._BTN_DEG.grid(row=4, column=5, padx=1, pady=1, sticky="news")
+        self._BTN_ACOSH.grid(row=4, column=6, padx=1, pady=1, sticky="news")
+        self._BTN_ASINH.grid(row=4, column=7, padx=1, pady=1, sticky="news")
 
         # Zeile 5
         self._BTN_EMPTY1.grid(row=5, column=0, padx=1, pady=1, sticky="news")
         self._BTN_EMPTY2.grid(row=5, column=1, padx=1, pady=1, sticky="news")
         self._BTN_EXP.grid(row=5, column=2, padx=1, pady=1, sticky="news")
         self._BTN_SQR.grid(row=5, column=3, padx=1, pady=1, sticky="news")
+        self._BTN_LOG10.grid(row=5, column=4, padx=1, pady=1, sticky="news")
+        self._BTN_LOG1P.grid(row=5, column=5, padx=1, pady=1, sticky="news")
+        self._BTN_EXPM1.grid(row=5, column=6, padx=1, pady=1, sticky="news")
+        self._BTN_LGAMMA.grid(row=5, column=7, padx=1, pady=1, sticky="news")
+        
 
         # Anzahl Schaltflächen Ereignisse
         self._BTN_NUM_0['command'] = partial(self._set_values_in_input, 0)
@@ -235,6 +287,33 @@ class Calculator(object):
         self._BTN_DIV['command'] = partial(self._set_operator_in_input, '/')
         self._BTN_EXP['command'] = partial(self._set_operator_in_input, '**')
         self._BTN_SQR['command'] = partial(self._set_operator_in_input, '**(1/2)')
+
+        # Ergebnis der Wissenschaftlichen Funktionstasten.
+
+        self._BTN_PI['command'] = partial(self._set_values_in_input, 'pi')
+        self._BTN_SIN['command'] = partial(self._set_values_in_input, 'sin')
+        self._BTN_COS['command'] = partial(self._set_values_in_input, 'cos')
+        self._BTN_TAN['command'] = partial(self._set_values_in_input, 'tan')
+        self._BTN_2PI['command'] = partial(self._set_values_in_input, '2*pi')
+        self._BTN_COSH['command'] = partial(self._set_values_in_input, 'cosh')
+        self._BTN_TANH['command'] = partial(self._set_values_in_input, 'tanh')
+        self._BTN_SINH['command'] = partial(self._set_values_in_input, 'sinh')
+        self._BTN_LOG['command'] = partial(self._set_values_in_input, 'log')
+        self._BTN_INV['command'] = partial(self._set_values_in_input, '1/')
+        self._BTN_MOD['command'] = partial(self._set_values_in_input, '%')
+        self._BTN_E['command'] = partial(self._set_values_in_input, 'e')
+        self._BTN_LOG2['command'] = partial(self._set_values_in_input, 'log2')
+        self._BTN_DEG['command'] = partial(self._set_values_in_input, 'degrees')
+        self._BTN_ACOSH['command'] = partial(self._set_values_in_input, 'acosh')
+        self._BTN_ASINH['command'] = partial(self._set_values_in_input, 'asinh')
+        self._BTN_LOG10['command'] = partial(self._set_values_in_input, 'log10')
+        self._BTN_LOG1P['command'] = partial(self._set_values_in_input, 'log1p')
+        self._BTN_EXPM1['command'] = partial(self._set_values_in_input, 'expm1')
+        self._BTN_LGAMMA['command'] = partial(self._set_values_in_input, 'lgamma')
+        self._BTN_RAD['command'] = partial(self._set_values_in_input, 'radians')
+        self._BTN_GAMMA['command'] = partial(self._set_values_in_input, 'gamma')
+        self._BTN_ERF['command'] = partial(self._set_values_in_input, 'erf')
+        self._BTN_ERFC['command'] = partial(self._set_values_in_input, 'erfc')
 
 
         # Ereignisse der Funktionstasten des Taschenrechners
