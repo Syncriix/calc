@@ -52,18 +52,22 @@ class Calculator(object):
 
         # Top-Level-Ausgabe
         self.master.title('Malia Calculator')
-        self.master.maxsize(width=335, height=415)
         self.master.minsize(width=335, height=415)
         self.master.geometry('-150+100')
+        self.master.resizable(True, True)
         self.master['bg'] = self.theme['master_bg']
 
         # Eingabebereich
-        self._frame_input = tk.Frame(self.master, bg=self.theme['frame_bg'], pady=4)
-        self._frame_input.pack()
+        self._frame_input = tk.Frame(self.master, bg=self.theme['frame_bg'])
+        self._frame_input.pack(padx=20)
+        self._frame_input.rowconfigure(0, weight=1)
+        self._frame_input.columnconfigure(0, weight=1)
 
         # Bereich der Schaltfläche
-        self._frame_buttons = tk.Frame(self.master, bg=self.theme['frame_bg'], padx=2)
-        self._frame_buttons.pack()
+        self._frame_buttons = tk.Frame(self.master, bg=self.theme['frame_bg'])
+        self._frame_buttons.pack(side="top", padx=20, pady=20, fill=tk.BOTH, expand=True)
+        self._frame_buttons.rowconfigure(tuple(range(6)), weight=1)
+        self._frame_buttons.columnconfigure(tuple(range(4)), weight=1)
 
         # Start-up-Funktionen
         self._create_input(self._frame_input)
@@ -94,7 +98,7 @@ class Calculator(object):
     def _create_input(self, master):
         self._entry = tk.Entry(master, cnf=self.theme['INPUT'])
         self._entry.insert(0,0)
-        self._entry.pack()
+        self._entry.pack(ipadx=20, fill=tk.X, expand=True)
 
     def _create_menu(self, master):
         self.master.option_add('*tearOff', FALSE)
@@ -133,6 +137,7 @@ class Calculator(object):
         vom Hinzufügen von Ereignissen zu den einzelnen Schaltflächen bis hin zu ihrer Verteilung auf dem Rasterlayout.
         """
 
+
         # Globale Einstellungen (Breite, Höhe, Schriftart usw.) für die angegebene Schaltfläche festlegen.
         self.theme['BTN_NUMBER'].update(self.settings['global'])
 
@@ -146,70 +151,70 @@ class Calculator(object):
         self._BTN_NUM_7 = tk.Button(master, text=7, cnf=self.theme['BTN_NUMBER'])
         self._BTN_NUM_8 = tk.Button(master, text=8, cnf=self.theme['BTN_NUMBER'])
         self._BTN_NUM_9 = tk.Button(master, text=9, cnf=self.theme['BTN_NUMBER'])
-
+        
         # Globale Einstellungen (Breite, Höhe, Schriftart usw.) für die angegebene Schaltfläche festlegen.
         self.theme['BTN_OPERATOR'].update(self.settings['global'])
 
         # Instanziierung der Schaltflächen der numerischen Operatoren
-        self._BTN_SOMA = tk.Button(master, text='+', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_ADD = tk.Button(master, text='+', cnf=self.theme['BTN_OPERATOR'])
         self._BTN_SUB = tk.Button(master, text='-', cnf=self.theme['BTN_OPERATOR'])
         self._BTN_DIV = tk.Button(master, text='/', cnf=self.theme['BTN_OPERATOR'])
         self._BTN_MULT = tk.Button(master, text='*', cnf=self.theme['BTN_OPERATOR'])
         self._BTN_EXP = tk.Button(master, text='^', cnf=self.theme['BTN_OPERATOR'])
-        self._BTN_RAIZ = tk.Button(master, text='√', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_SQR = tk.Button(master, text='√', cnf=self.theme['BTN_OPERATOR'])
 
         # Globale Einstellungen (Breite, Höhe, Schriftart usw.) für die angegebene Schaltfläche festlegen.
         self.theme['BTN_DEFAULT'].update(self.settings['global'])
         self.theme['BTN_CLEAR'].update(self.settings['global'])
 
         # Installation der Funktionstasten des Rechners.
-        self._BTN_ABRE_PARENTESE = tk.Button(master, text='(', cnf=self.theme['BTN_DEFAULT'])
-        self._BTN_FECHA_PARENTESE = tk.Button(master, text=')', cnf=self.theme['BTN_DEFAULT'])
+        self._BTN_OPEN_PARENT = tk.Button(master, text='(', cnf=self.theme['BTN_DEFAULT'])
+        self._BTN_CLOSE_PARENT = tk.Button(master, text=')', cnf=self.theme['BTN_DEFAULT'])
         self._BTN_CLEAR = tk.Button(master, text='C', cnf=self.theme['BTN_DEFAULT'])
         self._BTN_DEL = tk.Button(master, text='<', cnf=self.theme['BTN_CLEAR'])
         self._BTN_RESULT = tk.Button(master, text='=', cnf=self.theme['BTN_OPERATOR'])
         self._BTN_DOT = tk.Button(master, text='.', cnf=self.theme['BTN_DEFAULT'])
 
         # Instanziierung der leeren Schaltflächen, für die zukünftige Implementierung
-        self._BTN_VAZIO1 = tk.Button(master, text='', cnf=self.theme['BTN_OPERATOR'])
-        self._BTN_VAZIO2 = tk.Button(master, text='', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_EMPTY1 = tk.Button(master, text='', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_EMPTY2 = tk.Button(master, text='', cnf=self.theme['BTN_OPERATOR'])
 
         # Verteilung von Schaltflächen in einem Grid-Layout-Manager
         # Zeile 0
-        self._BTN_CLEAR.grid(row=0, column=0, padx=1, pady=1)
-        self._BTN_ABRE_PARENTESE.grid(row=0, column=1, padx=1, pady=1)
-        self._BTN_FECHA_PARENTESE.grid(row=0, column=2, padx=1, pady=1)
-        self._BTN_DEL.grid(row=0, column=3, padx=1, pady=1)
+        self._BTN_CLEAR.grid(row=0, column=0, padx=1, pady=1, sticky="news")
+        self._BTN_OPEN_PARENT.grid(row=0, column=1, padx=1, pady=1, sticky="news")
+        self._BTN_CLOSE_PARENT.grid(row=0, column=2, padx=1, pady=1, sticky="news")
+        self._BTN_DEL.grid(row=0, column=3, padx=1, pady=1, sticky="news")
 
         # Zeile 1
-        self._BTN_NUM_7.grid(row=1, column=0, padx=1, pady=1)
-        self._BTN_NUM_8.grid(row=1, column=1, padx=1, pady=1)
-        self._BTN_NUM_9.grid(row=1, column=2, padx=1, pady=1)
-        self._BTN_MULT.grid(row=1, column=3, padx=1, pady=1)
+        self._BTN_NUM_7.grid(row=1, column=0, padx=1, pady=1, sticky="news")
+        self._BTN_NUM_8.grid(row=1, column=1, padx=1, pady=1, sticky="news")
+        self._BTN_NUM_9.grid(row=1, column=2, padx=1, pady=1, sticky="news")
+        self._BTN_MULT.grid(row=1, column=3, padx=1, pady=1, sticky="news")
 
         # Zeile 2
-        self._BTN_NUM_4.grid(row=2, column=0, padx=1, pady=1)
-        self._BTN_NUM_5.grid(row=2, column=1, padx=1, pady=1)
-        self._BTN_NUM_6.grid(row=2, column=2, padx=1, pady=1)
-        self._BTN_SUB.grid(row=2, column=3, padx=1, pady=1)
+        self._BTN_NUM_4.grid(row=2, column=0, padx=1, pady=1, sticky="news")
+        self._BTN_NUM_5.grid(row=2, column=1, padx=1, pady=1, sticky="news")
+        self._BTN_NUM_6.grid(row=2, column=2, padx=1, pady=1, sticky="news")
+        self._BTN_SUB.grid(row=2, column=3, padx=1, pady=1, sticky="news")
 
         # Zeile 3
-        self._BTN_NUM_1.grid(row=3, column=0, padx=1, pady=1)
-        self._BTN_NUM_2.grid(row=3, column=1, padx=1, pady=1)
-        self._BTN_NUM_3.grid(row=3, column=2, padx=1, pady=1)
-        self._BTN_SOMA.grid(row=3, column=3, padx=1, pady=1)
+        self._BTN_NUM_1.grid(row=3, column=0, padx=1, pady=1, sticky="news")
+        self._BTN_NUM_2.grid(row=3, column=1, padx=1, pady=1, sticky="news")
+        self._BTN_NUM_3.grid(row=3, column=2, padx=1, pady=1, sticky="news")
+        self._BTN_ADD.grid(row=3, column=3, padx=1, pady=1, sticky="news")
 
         # Zeile 4
-        self._BTN_DOT.grid(row=4, column=0, padx=1, pady=1)
-        self._BTN_NUM_0.grid(row=4, column=1, padx=1, pady=1)
-        self._BTN_RESULT.grid(row=4, column=2, padx=1, pady=1)
-        self._BTN_DIV.grid(row=4, column=3, padx=1, pady=1)
+        self._BTN_DOT.grid(row=4, column=0, padx=1, pady=1, sticky="news")
+        self._BTN_NUM_0.grid(row=4, column=1, padx=1, pady=1, sticky="news")
+        self._BTN_RESULT.grid(row=4, column=2, padx=1, pady=1, sticky="news")
+        self._BTN_DIV.grid(row=4, column=3, padx=1, pady=1, sticky="news")
 
         # Zeile 5
-        self._BTN_VAZIO1.grid(row=5, column=0, padx=1, pady=1)
-        self._BTN_VAZIO2.grid(row=5, column=1, padx=1, pady=1)
-        self._BTN_EXP.grid(row=5, column=2, padx=1, pady=1)
-        self._BTN_RAIZ.grid(row=5, column=3, padx=1, pady=1)
+        self._BTN_EMPTY1.grid(row=5, column=0, padx=1, pady=1, sticky="news")
+        self._BTN_EMPTY2.grid(row=5, column=1, padx=1, pady=1, sticky="news")
+        self._BTN_EXP.grid(row=5, column=2, padx=1, pady=1, sticky="news")
+        self._BTN_SQR.grid(row=5, column=3, padx=1, pady=1, sticky="news")
 
         # Anzahl Schaltflächen Ereignisse
         self._BTN_NUM_0['command'] = partial(self._set_values_in_input, 0)
@@ -224,21 +229,24 @@ class Calculator(object):
         self._BTN_NUM_9['command'] = partial(self._set_values_in_input, 9)
 
         # Ereignisse der mathematischen Operationstasten
-        self._BTN_SOMA['command'] = partial(self._set_operator_in_input, '+')
+        self._BTN_ADD['command'] = partial(self._set_operator_in_input, '+')
         self._BTN_SUB['command'] = partial(self._set_operator_in_input, '-')
         self._BTN_MULT['command'] = partial(self._set_operator_in_input, '*')
         self._BTN_DIV['command'] = partial(self._set_operator_in_input, '/')
         self._BTN_EXP['command'] = partial(self._set_operator_in_input, '**')
-        self._BTN_RAIZ['command'] = partial(self._set_operator_in_input, '**(1/2)')
+        self._BTN_SQR['command'] = partial(self._set_operator_in_input, '**(1/2)')
 
 
         # Ereignisse der Funktionstasten des Taschenrechners
         self._BTN_DOT['command'] = partial(self._set_dot_in_input, '.')
-        self._BTN_ABRE_PARENTESE['command'] = self._set_open_parent
-        self._BTN_FECHA_PARENTESE['command'] = self._set_close_parent
+        self._BTN_OPEN_PARENT['command'] = self._set_open_parent
+        self._BTN_CLOSE_PARENT['command'] = self._set_close_parent
         self._BTN_DEL['command'] = self._del_last_value_in_input
         self._BTN_CLEAR['command'] = self._clear_input
         self._BTN_RESULT['command'] = self._get_data_in_input
+
+
+
 
     def _set_values_in_input(self, value):
         """Methode, die für die Erfassung des angeklickten und in der Eingabe gesetzten numerischen Wertes verantwortlich ist"""
