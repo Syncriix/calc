@@ -42,6 +42,303 @@ class Calculator(object):
         self.master = master
         self.calc = Calc()
 
+        self.settings = self._load_settings()
+        
+        # Legt den Standardstil für macOS fest, wenn es als Betriebssystem verwendet wird
+        if platform.system() == 'Darwin':
+            self.theme = self._get_theme('Default Theme For MacOS')
+        else:
+            self.theme = self._get_theme(self.settings['current_theme'])
+
+        # Top-Level-Ausgabe
+        self.master.title('Malia Calculator')
+        self.master.maxsize(width=335, height=415)
+        self.master.minsize(width=335, height=415)
+        self.master.geometry('-150+100')
+        self.master['bg'] = self.theme['master_bg']
+
+        # Eingabebereich
+        self._frame_input = tk.Frame(self.master, bg=self.theme['frame_bg'], pady=4)
+        self._frame_input.pack()
+
+        # Bereich der Schaltfläche
+        self._frame_buttons = tk.Frame(self.master, bg=self.theme['frame_bg'], padx=2)
+        self._frame_buttons.pack()
+
+        # Start-up-Funktionen
+        self._create_input(self._frame_input)
+        self._create_buttons(self._frame_buttons)
+        self._create_menu(self.master)
+
+    @staticmethod
+    def _load_settings():
+        """Dienstprogramm zum Laden der Rechner-Konfigurationsdatei."""
+        with open('./app/settings/settings.json', mode='r', encoding='utf-8') as f:
+            settings = json_load(f)
+        
+        return settings
+
+    def _get_theme(self, name='Dark'):
+        """Gibt die Stileinstellungen für das angegebene Thema zurück."""
+
+        list_of_themes = self.settings['themes']
+
+        found_theme = None
+        for t in list_of_themes:
+            if name == t['name']:
+                found_theme = deepcopy(t)
+                break
+        
+        return found_theme
+        
+    def _create_input(self, master):
+        self._entry = tk.Entry(master, cnf=self.theme['INPUT'])
+        self._entry.insert(0,0)
+        self._entry.pack()
+
+    def _create_menu(self, master):
+        self.master.option_add('*tearOff', FALSE)
+        calc_menu = Menu(self.master)
+        self.master.config(menu=calc_menu)
+
+        #Konfiguration
+        config = Menu(calc_menu)
+        theme = Menu(config)
+        # Themen Menu
+        incompitables_theme = ['Default Theme For MacOS']
+        for t in self.settings['themes']:
+
+            name = t['name']
+            if name in incompitables_theme:  # Nicht kompatible Themen ignorieren.
+                continue
+            else:
+                theme.add_command(label=name, command=partial(self._change_theme_to, name))
+        #Konfiguration
+        calc_menu.add_cascade(label='Konfiguration', menu=config)
+        config.add_cascade(label='Theme', menu=theme)
+
+        config.add_separator()
+        config.add_command(label='Beenden', command=self._exit)
+
+    def _change_theme_to(self, name='Dark'):
+        self.settings['current_theme'] = name
+
+        with open('./app/settings/settings.json', 'w') as outfile:
+            json_dump(self.settings, outfile, indent=4)
+
+        self._realod_app()
+        
+    def _create_buttons(self, master):
+        """"Methode, die für die Erstellung aller Schaltflächen des Taschenrechners verantwortlich ist,
+        vom Hinzufügen von Ereignissen zu den einzelnen Schaltflächen bis hin zu ihrer Verteilung auf dem Rasterlayout.
+        """
+
+        # Globale Einstellungen (Breite, Höhe, Schriftart usw.) für die angegebene Schaltfläche festlegen.
+        self.theme['BTN_NUMBER'].update(self.settings['global'])
+
+        self._BTN_NUM_0 = tk.Button(master, text=0, cnf=self.theme['BTN_NUMBER'])
+        self._BTN_NUM_1 = tk.Button(master, text=1, cnf=self.theme['BTN_NUMBER'])
+        self._BTN_NUM_2 = tk.Button(master, text=2, cnf=self.theme['BTN_NUMBER'])
+        self._BTN_NUM_3 = tk.Button(master, text=3, cnf=self.theme['BTN_NUMBER'])
+        self._BTN_NUM_4 = tk.Button(master, text=4, cnf=self.theme['BTN_NUMBER'])
+        self._BTN_NUM_5 = tk.Button(master, text=5, cnf=self.theme['BTN_NUMBER'])
+        self._BTN_NUM_6 = tk.Button(master, text=6, cnf=self.theme['BTN_NUMBER'])
+        self._BTN_NUM_7 = tk.Button(master, text=7, cnf=self.theme['BTN_NUMBER'])
+        self._BTN_NUM_8 = tk.Button(master, text=8, cnf=self.theme['BTN_NUMBER'])
+        self._BTN_NUM_9 = tk.Button(master, text=9, cnf=self.theme['BTN_NUMBER'])
+
+        # Globale Einstellungen (Breite, Höhe, Schriftart usw.) für die angegebene Schaltfläche festlegen.
+        self.theme['BTN_OPERATOR'].update(self.settings['global'])
+
+        # Instanziierung der Schaltflächen der numerischen Operatoren
+        self._BTN_SOMA = tk.Button(master, text='+', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_SUB = tk.Button(master, text='-', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_DIV = tk.Button(master, text='/', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_MULT = tk.Button(master, text='*', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_EXP = tk.Button(master, text='^', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_RAIZ = tk.Button(master, text='√', cnf=self.theme['BTN_OPERATOR'])
+
+        # Globale Einstellungen (Breite, Höhe, Schriftart usw.) für die angegebene Schaltfläche festlegen.
+        self.theme['BTN_DEFAULT'].update(self.settings['global'])
+        self.theme['BTN_CLEAR'].update(self.settings['global'])
+
+        # Installation der Funktionstasten des Rechners.
+        self._BTN_ABRE_PARENTESE = tk.Button(master, text='(', cnf=self.theme['BTN_DEFAULT'])
+        self._BTN_FECHA_PARENTESE = tk.Button(master, text=')', cnf=self.theme['BTN_DEFAULT'])
+        self._BTN_CLEAR = tk.Button(master, text='C', cnf=self.theme['BTN_DEFAULT'])
+        self._BTN_DEL = tk.Button(master, text='<', cnf=self.theme['BTN_CLEAR'])
+        self._BTN_RESULT = tk.Button(master, text='=', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_DOT = tk.Button(master, text='.', cnf=self.theme['BTN_DEFAULT'])
+
+        # Instanziierung der leeren Schaltflächen, für die zukünftige Implementierung
+        self._BTN_VAZIO1 = tk.Button(master, text='', cnf=self.theme['BTN_OPERATOR'])
+        self._BTN_VAZIO2 = tk.Button(master, text='', cnf=self.theme['BTN_OPERATOR'])
+
+        # Verteilung von Schaltflächen in einem Grid-Layout-Manager
+        # Zeile 0
+        self._BTN_CLEAR.grid(row=0, column=0, padx=1, pady=1)
+        self._BTN_ABRE_PARENTESE.grid(row=0, column=1, padx=1, pady=1)
+        self._BTN_FECHA_PARENTESE.grid(row=0, column=2, padx=1, pady=1)
+        self._BTN_DEL.grid(row=0, column=3, padx=1, pady=1)
+
+        # Zeile 1
+        self._BTN_NUM_7.grid(row=1, column=0, padx=1, pady=1)
+        self._BTN_NUM_8.grid(row=1, column=1, padx=1, pady=1)
+        self._BTN_NUM_9.grid(row=1, column=2, padx=1, pady=1)
+        self._BTN_MULT.grid(row=1, column=3, padx=1, pady=1)
+
+        # Zeile 2
+        self._BTN_NUM_4.grid(row=2, column=0, padx=1, pady=1)
+        self._BTN_NUM_5.grid(row=2, column=1, padx=1, pady=1)
+        self._BTN_NUM_6.grid(row=2, column=2, padx=1, pady=1)
+        self._BTN_SUB.grid(row=2, column=3, padx=1, pady=1)
+
+        # Zeile 3
+        self._BTN_NUM_1.grid(row=3, column=0, padx=1, pady=1)
+        self._BTN_NUM_2.grid(row=3, column=1, padx=1, pady=1)
+        self._BTN_NUM_3.grid(row=3, column=2, padx=1, pady=1)
+        self._BTN_SOMA.grid(row=3, column=3, padx=1, pady=1)
+
+        # Zeile 4
+        self._BTN_DOT.grid(row=4, column=0, padx=1, pady=1)
+        self._BTN_NUM_0.grid(row=4, column=1, padx=1, pady=1)
+        self._BTN_RESULT.grid(row=4, column=2, padx=1, pady=1)
+        self._BTN_DIV.grid(row=4, column=3, padx=1, pady=1)
+
+        # Zeile 5
+        self._BTN_VAZIO1.grid(row=5, column=0, padx=1, pady=1)
+        self._BTN_VAZIO2.grid(row=5, column=1, padx=1, pady=1)
+        self._BTN_EXP.grid(row=5, column=2, padx=1, pady=1)
+        self._BTN_RAIZ.grid(row=5, column=3, padx=1, pady=1)
+
+        # Anzahl Schaltflächen Ereignisse
+        self._BTN_NUM_0['command'] = partial(self._set_values_in_input, 0)
+        self._BTN_NUM_1['command'] = partial(self._set_values_in_input, 1)
+        self._BTN_NUM_2['command'] = partial(self._set_values_in_input, 2)
+        self._BTN_NUM_3['command'] = partial(self._set_values_in_input, 3)
+        self._BTN_NUM_4['command'] = partial(self._set_values_in_input, 4)
+        self._BTN_NUM_5['command'] = partial(self._set_values_in_input, 5)
+        self._BTN_NUM_6['command'] = partial(self._set_values_in_input, 6)
+        self._BTN_NUM_7['command'] = partial(self._set_values_in_input, 7)
+        self._BTN_NUM_8['command'] = partial(self._set_values_in_input, 8)
+        self._BTN_NUM_9['command'] = partial(self._set_values_in_input, 9)
+
+        # Ereignisse der mathematischen Operationstasten
+        self._BTN_SOMA['command'] = partial(self._set_operator_in_input, '+')
+        self._BTN_SUB['command'] = partial(self._set_operator_in_input, '-')
+        self._BTN_MULT['command'] = partial(self._set_operator_in_input, '*')
+        self._BTN_DIV['command'] = partial(self._set_operator_in_input, '/')
+        self._BTN_EXP['command'] = partial(self._set_operator_in_input, '**')
+        self._BTN_RAIZ['command'] = partial(self._set_operator_in_input, '**(1/2)')
+
+
+        # Ereignisse der Funktionstasten des Taschenrechners
+        self._BTN_DOT['command'] = partial(self._set_dot_in_input, '.')
+        self._BTN_ABRE_PARENTESE['command'] = self._set_open_parent
+        self._BTN_FECHA_PARENTESE['command'] = self._set_close_parent
+        self._BTN_DEL['command'] = self._del_last_value_in_input
+        self._BTN_CLEAR['command'] = self._clear_input
+        self._BTN_RESULT['command'] = self._get_data_in_input
+
+    def _set_values_in_input(self, value):
+        """Methode, die für die Erfassung des angeklickten und in der Eingabe gesetzten numerischen Wertes verantwortlich ist"""
+        if self._entry.get() == 'Error':
+            self._entry.delete(0, len(self._entry.get()))
+
+        if self._entry.get() == '0':
+            self._entry.delete(0)
+            self._entry.insert(0 ,value)
+        elif self._lenght_max(self._entry.get()):
+            self._entry.insert(len(self._entry.get()) ,value)
+    
+    def _set_dot_in_input(self, dot):
+        """Methode, die für das Setzen des Dezimaltrennzeichens im Wert zuständig ist"""
+        if self._entry.get() == 'Error':
+            return 
+
+        if self._entry.get()[-1] not in '.+-/*' and self._lenght_max(self._entry.get()):
+            self._entry.insert(len(self._entry.get()) ,dot)
+
+    def _set_open_parent(self):
+        """Methode zum Setzen der öffnenden Klammern in der Eingabe"""
+        if self._entry.get() == 'Error':
+            return 
+
+        if self._entry.get() == '0':
+            self._entry.delete(0)
+            self._entry.insert(len(self._entry.get()), '(')
+        elif self._entry.get()[-1] in '+-/*' and self._lenght_max(self._entry.get()):
+            self._entry.insert(len(self._entry.get()), '(')
+    
+    def _set_close_parent(self):
+        """Methode zum Setzen der schließenden Klammern in der Eingabe"""
+        if self._entry.get() == 'Error':
+            return
+
+        if self._entry.get().count('(') <= self._entry.get().count(')'):
+            return
+        if self._entry.get()[-1] not in '+-/*(' and self._lenght_max(self._entry.get()):
+            self._entry.insert(len(self._entry.get()), ')')
+
+    def _clear_input(self):
+        """Setzt die Rechnereingabe zurück, löscht sie vollständig und gibt den Wert 0 ein."""
+        self._entry.delete(0, len(self._entry.get()))
+        self._entry.insert(0,0)
+    
+    def _del_last_value_in_input(self):
+        """Löscht die letzte Ziffer in der Eingabe"""
+        if self._entry.get() == 'Error':
+            return
+
+        if len(self._entry.get()) == 1:
+            self._entry.delete(0)
+            self._entry.insert(0,0)
+        else:
+            self._entry.delete(len(self._entry.get()) - 1)
+    
+    def _set_operator_in_input(self, operator):
+        """Methode, die für die Erfassung des angeklickten und in der Eingabe gesetzten mathematischen Operators zuständig ist"""
+        if self._entry.get() == 'Error':
+            return
+
+        if self._entry.get() == '':
+            # print('\33[91mUngültige Operation.\33[m'))
+            return
+        # Vermeiden von aufeinanderfolgenden Wiederholungen von Vorgängen, um Fehler zu vermeiden.
+        if self._entry.get()[-1] not in '+-*/' and self._lenght_max(self._entry.get()):
+            self._entry.insert(len(self._entry.get()) ,operator)
+            
+    def _get_data_in_input(self):
+        """Nimmt die Daten mit allen in der Eingabe enthaltenen Operationen
+        um die Berechnung durchzuführen"""
+        if self._entry.get() == 'Error':
+            return
+
+        result = self.calc.calculation(self._entry.get())
+        self._set_result_in_input(result=result)
+
+    def _set_result_in_input(self, result=0):
+        """Das Ergebnis der gesamten Operation in der Eingabe mit Pfeilen"""
+        if self._entry.get() == 'Error':
+            return
+
+        self._entry.delete(0, len(self._entry.get()))
+        self._entry.insert(0, result)
+
+    def _lenght_max(self, data_in_input):
+        """Überprüfen, ob die Eingabe die maximale Anzahl von Zeichen erreicht hat"""
+        if len(str(data_in_input)) >= 15:
+            return False
+        return True
+            
+    def start(self):
+        print('\33[92mCalculator Tk Started. . . .\33[m\n')
+        self.master.mainloop()
+    
+    def _realod_app(self):
+        """Startet die Anwendung neu."""
+        python = sys.executable  # Ruft den Pfad der ausführbaren Python-Datei ab
+        os.execl(python, python, * sys.argv)
 
 
     def _exit(self):
