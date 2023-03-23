@@ -328,7 +328,7 @@ class Calculator(object):
 
 
     def _set_values_in_input(self, value):
-           """Methode, die für die Erfassung des angeklickten und in der Eingabe gesetzten numerischen Wertes verantwortlich ist"""
+        """Methode, die für die Erfassung des angeklickten und in der Eingabe gesetzten numerischen Wertes verantwortlich ist"""
         if self._entry.get() == 'Error':
             self._entry.delete(0, len(self._entry.get()))
 
