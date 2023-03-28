@@ -3,6 +3,7 @@
 # @autor: Sebastian Rohner
 # @github: github.com/Syncriix
 
+# skipcq: PY-W2000
 from math import pi, cos, sin, tan, acos, asin, atan, sqrt, log, log10, exp, factorial, pow, e, tau, inf, nan
 
 class Calc(object):
