@@ -467,7 +467,8 @@ class Calculator:
         self._entry.delete(0, len(self._entry.get()))
         self._entry.insert(0, result)
 
-    def _lenght_max(self, data_in_input):
+    @staticmethod
+    def _lenght_max(data_in_input):
         """Überprüfen, ob die Eingabe die maximale Anzahl von Zeichen erreicht hat"""
         if len(str(data_in_input)) >= 15:
             return False
@@ -477,7 +478,8 @@ class Calculator:
         print('\33[92mCalculator Tk Started. . . .\33[m\n')
         self.master.mainloop()
 
-    def _realod_app(self):
+    @staticmethod
+    def _realod_app():
         """Startet die Anwendung neu."""
         python = sys.executable  # Ruft den Pfad der ausführbaren Python-Datei ab
         os.execl(python, python, * sys.argv)

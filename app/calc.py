@@ -9,7 +9,6 @@ import ast
 from math import pi, cos, sin, tan, acos, asin, atan, sqrt, log, log10, exp, factorial, pow, e, tau, inf, nan
 
 
-
 class Calc:
     """Klasse, die für die Durchführung aller Berechnungen im Taschenrechner verantwortlich ist"""
 
@@ -28,7 +27,8 @@ class Calc:
         except (NameError, ZeroDivisionError, SyntaxError, ValueError):
             return 'Error'
 
-    def __format_result(self, result):
+    @staticmethod
+    def __format_result(result):
         """Formatiert das Ergebnis in wissenschaftlicher Notation, wenn es zu groß ist
         und gibt den formatierten Wert im String-Typ zurück"""
 
