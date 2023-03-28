@@ -3,10 +3,14 @@
 # @autor: Sebastian Rohner
 # @github: github.com/Syncriix
 
+
+import ast
+# skipcq: PY-W2000
 from math import pi, cos, sin, tan, acos, asin, atan, sqrt, log, log10, exp, factorial, pow, e, tau, inf, nan
 
 
-class Calc(object):
+
+class Calc:
     """Klasse, die für die Durchführung aller Berechnungen im Taschenrechner verantwortlich ist"""
 
     def calculation(self, calc):
@@ -17,10 +21,9 @@ class Calc(object):
 
     def __calculation_validation(self, calc):
         """Verantwortlich für die Überprüfung, ob die angegebene Berechnung durchgeführt werden kann"""
-        result = eval(calc)
+        result = ast.literal_eval(calc)
         try:
-            print(eval(calc))
-
+            print(ast.literal_eval(calc))
             return self.__format_result(result=result)
         except (NameError, ZeroDivisionError, SyntaxError, ValueError):
             return 'Error'

@@ -21,7 +21,7 @@ from copy import deepcopy
 from .calc import Calc
 
 
-class Calculator(object):
+class Calculator:
     """Klasse für die Erstellung des Layouts des Rechners, 
     die Verteilung der Schaltflächen und die Einrichtung seiner Funktionalitäten.
 
@@ -478,12 +478,13 @@ class Calculator(object):
         print('\33[92mCalculator Tk Started. . . .\33[m\n')
         self.master.mainloop()
 
+
     @staticmethod
     def _realod_app():
         """Startet die Anwendung neu."""
         python = sys.executable  # Ruft den Pfad der ausführbaren Python-Datei ab
         os.execl(python, python, * sys.argv)
 
-    @staticmethod
-    def _exit():
+
+    def _exit(self):
         exit()
