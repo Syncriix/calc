@@ -478,13 +478,11 @@ class Calculator:
         print('\33[92mCalculator Tk Started. . . .\33[m\n')
         self.master.mainloop()
 
-
     @staticmethod
     def _realod_app():
         """Startet die Anwendung neu."""
         python = sys.executable  # Ruft den Pfad der ausführbaren Python-Datei ab
         os.execl(python, python, * sys.argv)
-
 
     def _exit(self):
         exit()
