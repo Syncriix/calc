@@ -26,7 +26,8 @@ class Calc(object):
         except (NameError, ZeroDivisionError, SyntaxError, ValueError):
             return 'Error'
 
-    def __format_result(self, result):
+    @staticmethod
+    def __format_result(result):
         """Formatiert das Ergebnis in wissenschaftlicher Notation, wenn es zu groß ist
         und gibt den formatierten Wert im String-Typ zurück"""
 
