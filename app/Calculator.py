@@ -21,7 +21,7 @@ from copy import deepcopy
 from .calc import Calc
 
 
-class Calculator(object):
+class Calculator:
     """Klasse für die Erstellung des Layouts des Rechners, 
     die Verteilung der Schaltflächen und die Einrichtung seiner Funktionalitäten.
 
