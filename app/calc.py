@@ -5,7 +5,7 @@
 
 from math import pi, cos, sin, tan, acos, asin, atan, sqrt, log, log10, exp, factorial, pow, e, tau, inf, nan
 
-class Calc(object):
+class Calc:
     """Klasse, die für die Durchführung aller Berechnungen im Taschenrechner verantwortlich ist"""
     
     def calculation(self, calc):
